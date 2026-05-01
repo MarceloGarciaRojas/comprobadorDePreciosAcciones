@@ -6,17 +6,21 @@ const cors = require('cors');
 
 const app = express();
 
+// Helmet general, pero SIN contentSecurityPolicy
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'"],
-      },
-    },
+    contentSecurityPolicy: false,
   })
 );
+
+// CSP exacta para que las pruebas la detecten correctamente
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self'; style-src 'self'"
+  );
+  next();
+});
 
 app.use(cors());
 app.use(express.json());
