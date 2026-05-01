@@ -10,7 +10,8 @@ function anonymizeIp(ip) {
 module.exports = function (app) {
   app.get('/api/stock-prices', async (req, res) => {
     try {
-      let { stock, like } = req.query;
+      let stock = req.query.stock || req.query['stock[]'];
+      const { like } = req.query;
       const ipHash = anonymizeIp(req.ip || req.connection.remoteAddress || 'unknown');
 
       if (!Array.isArray(stock)) {
