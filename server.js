@@ -8,6 +8,7 @@ const app = express();
 
 app.use(
   helmet.contentSecurityPolicy({
+    useDefaults: false,
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
