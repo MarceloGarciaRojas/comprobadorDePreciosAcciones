@@ -8,7 +8,17 @@ const app = express();
 
 app.use(
   helmet({
-    contentSecurityPolicy: false
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'", "data:"],
+        connectSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: []
+      }
+    }
   })
 );
 

@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "set NODE_ENV=development&& node server.js",
+    "start": "node server.js",
     "test": "set NODE_ENV=test&& mocha tests/2_functional-tests.js"
   },
   "keywords": [],
