@@ -6,13 +6,18 @@ const cors = require('cors');
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self'; style-src 'self'"
-  );
-  next();
-});
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"]
+      }
+    }
+  })
+);
 
 app.use(cors());
 
