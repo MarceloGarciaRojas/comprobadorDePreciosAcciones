@@ -6,43 +6,37 @@ const cors = require('cors');
 
 const app = express();
 
-// Seguridad básica
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'"]
-      }
-    }
+    contentSecurityPolicy: false
   })
 );
 
-app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self'; style-src 'self'"
+  );
+  next();
+});
 
-// Permitir leer datos
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Ruta de prueba
 app.get('/', (req, res) => {
-  res.send('Servidor funcionando 🚀');
+  res.send('Stock Price Checker');
 });
 
 const apiRoutes = require('./routes/api.js');
 apiRoutes(app);
 
-// Puerto
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Levantar servidor
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });
 }
-
-module.exports = app;
 
 module.exports = app;
