@@ -6,18 +6,17 @@ const cors = require('cors');
 
 const app = express();
 
-
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'"],
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+      },
     },
   })
 );
-
-
 
 app.use(cors());
 app.use(express.json());
