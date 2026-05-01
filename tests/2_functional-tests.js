@@ -5,15 +5,17 @@ const server = require('../server');
 const assert = chai.assert;
 chai.use(chaiHttp);
 
-describe('Functional Tests', function () {
-    this.timeout(10000);
-  // 1️⃣ Ver un stock
-  it('Ver un stock', function (done) {
-    chai.request(server)
-      .get('/api/stock-prices?stock=GOOG')
+suite('Functional Tests', function () {
+  this.timeout(15000);
+
+  test('Viewing one stock: GET request to /api/stock-prices/', function (done) {
+    chai
+      .request(server)
+      .get('/api/stock-prices')
+      .query({ stock: 'GOOG' })
       .end(function (err, res) {
         assert.equal(res.status, 200);
-        assert.exists(res.body.stockData);
+        assert.property(res.body, 'stockData');
         assert.equal(res.body.stockData.stock, 'GOOG');
         assert.isNumber(res.body.stockData.price);
         assert.isNumber(res.body.stockData.likes);
@@ -21,56 +23,73 @@ describe('Functional Tests', function () {
       });
   });
 
-  // 2️⃣ Ver un stock y darle like
-  it('Ver un stock y darle like', function (done) {
-    chai.request(server)
-      .get('/api/stock-prices?stock=GOOG&like=true')
+  test('Viewing one stock and liking it: GET request to /api/stock-prices/', function (done) {
+    chai
+      .request(server)
+      .get('/api/stock-prices')
+      .query({ stock: 'MSFT', like: true })
       .end(function (err, res) {
         assert.equal(res.status, 200);
-        assert.isNumber(res.body.stockData.likes);
+        assert.property(res.body, 'stockData');
+        assert.equal(res.body.stockData.stock, 'MSFT');
+        assert.isNumber(res.body.stockData.price);
+        assert.equal(res.body.stockData.likes, 1);
         done();
       });
   });
 
-  // 3️⃣ Dar like de nuevo (no debe aumentar)
-  it('Dar like de nuevo (misma IP)', function (done) {
-    chai.request(server)
-      .get('/api/stock-prices?stock=GOOG&like=true')
+  test('Viewing the same stock and liking it again: GET request to /api/stock-prices/', function (done) {
+    chai
+      .request(server)
+      .get('/api/stock-prices')
+      .query({ stock: 'MSFT', like: true })
       .end(function (err, res) {
-        const likes = res.body.stockData.likes;
-
-        chai.request(server)
-          .get('/api/stock-prices?stock=GOOG&like=true')
-          .end(function (err2, res2) {
-            assert.equal(res2.body.stockData.likes, likes);
-            done();
-          });
+        assert.equal(res.status, 200);
+        assert.property(res.body, 'stockData');
+        assert.equal(res.body.stockData.stock, 'MSFT');
+        assert.equal(res.body.stockData.likes, 1);
+        done();
       });
   });
 
-  // 4️⃣ Ver dos acciones
-  it('Ver dos acciones', function (done) {
-    chai.request(server)
-      .get('/api/stock-prices?stock=GOOG&stock=AAPL')
+  test('Viewing two stocks: GET request to /api/stock-prices/', function (done) {
+    chai
+      .request(server)
+      .get('/api/stock-prices')
+      .query({ stock: ['GOOG', 'AAPL'] })
       .end(function (err, res) {
         assert.equal(res.status, 200);
+        assert.property(res.body, 'stockData');
         assert.isArray(res.body.stockData);
         assert.lengthOf(res.body.stockData, 2);
+        assert.equal(res.body.stockData[0].stock, 'GOOG');
+        assert.equal(res.body.stockData[1].stock, 'AAPL');
+        assert.isNumber(res.body.stockData[0].price);
+        assert.isNumber(res.body.stockData[1].price);
+        assert.isNumber(res.body.stockData[0].rel_likes);
+        assert.isNumber(res.body.stockData[1].rel_likes);
         done();
       });
   });
 
-  // 5️⃣ Ver dos acciones con like
-  it('Ver dos acciones con like', function (done) {
-    chai.request(server)
-      .get('/api/stock-prices?stock=GOOG&stock=AAPL&like=true')
+  test('Viewing two stocks and liking them: GET request to /api/stock-prices/', function (done) {
+    chai
+      .request(server)
+      .get('/api/stock-prices')
+      .query({ stock: ['GOOG', 'AAPL'], like: true })
       .end(function (err, res) {
         assert.equal(res.status, 200);
+        assert.property(res.body, 'stockData');
         assert.isArray(res.body.stockData);
-        assert.exists(res.body.stockData[0].rel_likes);
-        assert.exists(res.body.stockData[1].rel_likes);
+        assert.lengthOf(res.body.stockData, 2);
+        assert.equal(res.body.stockData[0].stock, 'GOOG');
+        assert.equal(res.body.stockData[1].stock, 'AAPL');
+        assert.isNumber(res.body.stockData[0].price);
+        assert.isNumber(res.body.stockData[1].price);
+        assert.isNumber(res.body.stockData[0].rel_likes);
+        assert.isNumber(res.body.stockData[1].rel_likes);
+        assert.equal(res.body.stockData[0].rel_likes, -res.body.stockData[1].rel_likes);
         done();
       });
   });
-
 });
