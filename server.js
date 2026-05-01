@@ -6,28 +6,25 @@ const cors = require('cors');
 
 const app = express();
 
-// Helmet general, pero SIN contentSecurityPolicy
 app.use(
-  helmet({
-    contentSecurityPolicy: false,
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"]
+    }
   })
 );
 
-// CSP exacta para que las pruebas la detecten correctamente
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self'; style-src 'self'"
-  );
-  next();
-});
-
 app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/public', express.static(process.cwd() + '/public'));
+
 app.get('/', (req, res) => {
-  res.send('Stock Price Checker');
+  res.sendFile(process.cwd() + '/public/index.html');
 });
 
 const apiRoutes = require('./routes/api.js');
