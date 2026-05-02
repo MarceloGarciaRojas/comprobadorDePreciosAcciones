@@ -6,20 +6,18 @@ const cors = require('cors');
 
 const app = express();
 
-// 1. Desactiva explícitamente la cabecera de Express
-app.disable('x-powered-by');
+app.use(helmet.hidePoweredBy());
 
-// 2. Configura Helmet en un solo bloque limpio
-app.use(helmet({
-  contentSecurityPolicy: {
+app.use(
+  helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'"],
+      styleSrc: ["'self'"]
     }
-  },
-  hidePoweredBy: true // Refuerzo para ocultar la tecnología
-}));
+  })
+);
+
 app.use(cors());
 
 app.use(express.json());
@@ -34,11 +32,11 @@ app.get('/', (req, res) => {
 const apiRoutes = require('./routes/api.js');
 apiRoutes(app);
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
   });
 }
 
