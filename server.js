@@ -6,13 +6,15 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(function(req, res, next) {
-  res.setHeader(
-    'Content-Security-Policy',
-    "script-src 'self'; style-src 'self';"
-  );
-  next();
-});
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": ["'self'"],
+      "style-src": ["'self'"],
+    },
+  })
+);
 
 app.use(cors());
 
