@@ -6,16 +6,21 @@ const cors = require('cors');
 
 const app = express();
 
+const helmet = require('helmet');
+
+// Úsalo al principio, justo después de instanciar 'app'
+app.use(helmet()); 
+
+// Configuración específica de CSP para el Test 2
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      "default-src": ["'self'"],
-      "script-src": ["'self'"],
-      "style-src": ["'self'"],
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
     },
   })
 );
-
 app.use(cors());
 
 app.use(express.json());
