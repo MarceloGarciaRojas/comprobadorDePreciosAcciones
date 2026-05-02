@@ -6,19 +6,20 @@ const cors = require('cors');
 
 const app = express();
 
-// Úsalo al principio, justo después de instanciar 'app'
-app.use(helmet()); 
+// 1. Desactiva explícitamente la cabecera de Express
+app.disable('x-powered-by');
 
-// Configuración específica de CSP para el Test 2
-app.use(
-  helmet.contentSecurityPolicy({
+// 2. Configura Helmet en un solo bloque limpio
+app.use(helmet({
+  contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
       styleSrc: ["'self'"],
-    },
-  })
-);
+    }
+  },
+  hidePoweredBy: true // Refuerzo para ocultar la tecnología
+}));
 app.use(cors());
 
 app.use(express.json());
