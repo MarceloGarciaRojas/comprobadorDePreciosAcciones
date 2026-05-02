@@ -6,8 +6,6 @@ const cors = require('cors');
 
 const app = express();
 
-const helmet = require('helmet');
-
 // Úsalo al principio, justo después de instanciar 'app'
 app.use(helmet()); 
 
