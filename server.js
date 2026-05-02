@@ -1,3 +1,5 @@
+'use strict';
+
 require('dotenv').config();
 
 const express = require('express');
@@ -5,8 +7,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const app = express();
-
-app.use(helmet.hidePoweredBy());
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -18,25 +18,25 @@ app.use(
   })
 );
 
-app.use(cors());
+app.use(helmet.hidePoweredBy());
+app.use(helmet.noSniff());
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/public', express.static(process.cwd() + '/public'));
-
 app.get('/', (req, res) => {
-  res.sendFile(process.cwd() + '/public/index.html');
+  res.send('Stock Price Checker');
 });
 
 const apiRoutes = require('./routes/api.js');
 apiRoutes(app);
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
   });
 }
 
