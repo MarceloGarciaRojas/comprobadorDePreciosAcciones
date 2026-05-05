@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stock Price Checker</title>
+    <link rel="stylesheet" href="/public/style.css" />
+  </head>
+
+  <body>
+    <main>
+      <h1>Stock Price Checker</h1>
+
+      <section>
+        <h2>Consultar una acción</h2>
+
+        <form id="single-stock-form">
+          <input
+            type="text"
+            name="stock"
+            placeholder="GOOG"
+            required
+          />
+
+          <label>
+            <input type="checkbox" name="like" value="true" />
+            Like
+          </label>
+
+          <button type="submit">Consultar</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Comparar dos acciones</h2>
+
+        <form id="two-stock-form">
+          <input
+            type="text"
+            name="stock1"
+            placeholder="GOOG"
+            required
+          />
+
+          <input
+            type="text"
+            name="stock2"
+            placeholder="AAPL"
+            required
+          />
+
+          <label>
+            <input type="checkbox" name="like" value="true" />
+            Like
+          </label>
+
+          <button type="submit">Comparar</button>
+        </form>
+      </section>
+
+      <pre id="result"></pre>
+    </main>
+
+    <script src="/public/client.js"></script>
+  </body>
+</html>
