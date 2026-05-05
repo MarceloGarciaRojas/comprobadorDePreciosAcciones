@@ -5,21 +5,23 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const helmet = require('helmet');
 
 const apiRoutes = require('./routes/api.js');
 
 const app = express();
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'"]
-    }
-  })
-);
+/*
+  freeCodeCamp Stock Price Checker:
+  El bot espera que scripts y CSS solo carguen desde el propio servidor.
+  Header mínimo y directo para evitar problemas con versiones de Helmet.
+*/
+app.use(function (req, res, next) {
+  res.setHeader(
+    'Content-Security-Policy',
+    "script-src 'self'; style-src 'self'"
+  );
+  next();
+});
 
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.json());
