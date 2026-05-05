@@ -1,25 +1,28 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 40px;
+#userstories {
+  margin-left: 5%;
+  margin-top: 5%;
 }
 
-main {
-  max-width: 700px;
-  margin: 0 auto;
+.p-50 {
+  margin: 50px;
 }
 
-section {
-  margin-bottom: 30px;
+#testui {
+  margin-left: 5%;
 }
 
-input,
-button {
-  padding: 8px;
-  margin: 5px;
+.text-align-left {
+  text-align: left;
 }
 
-pre {
-  padding: 15px;
-  border: 1px solid #ccc;
-  white-space: pre-wrap;
+input[type='text'] {
+  width: 100px;
+}
+
+.m-50 {
+  margin: 50px;
+}
+
+.mt-200 {
+  margin-top: 200px;
 }
